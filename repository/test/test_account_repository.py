@@ -1,3 +1,6 @@
+# TODO: 값 유효성 검사하는 부분은 service로 옮기기
+# repository에서는 그냥 입출력만 잘 되도록 구현하기
+
 from unittest import TestCase
 
 from repository.account_repository import (
@@ -11,7 +14,7 @@ from repository.account_repository_memory import AccountRepositoryMemory
 from domain.account import Account
 
 
-class AccountRepositoryMemoryTest(TestCase):
+class AccountRepositoryTest(TestCase):
     repository = AccountRepositoryMemory()
 
     def setUp(self) -> None:
