@@ -54,7 +54,29 @@ class AccountServiceTest(TestCase):
             balance = self.account_service.get_balance("")
 
     def test_deposit(self):
-        pass
+        account = self.account_service.create_account()
+        self.account_service.deposit(account.account_number, 50000)
+        new_balance = self.account_service.get_balance(account.account_number)
+        self.assertEqual(new_balance, 50000)
+
+        self.account_service.deposit(account.account_number, 30000)
+        new_balance = self.account_service.get_balance(account.account_number)
+        self.assertEqual(new_balance, 80000)
+
+    def test_failed_deposit_by_zero_input(self):
+        account = self.account_service.create_account()
+        with self.assertRaises(EmptyValueError):
+            self.account_service.deposit(account.account_number, 0)
+
+    def test_failed_deposit_by_negative_input(self):
+        account = self.account_service.create_account()
+        with self.assertRaises(NegativeValueError):
+            self.account_service.deposit(account.account_number, -10000)
+
+    def test_failed_deposit_by_decimal_input(self):
+        account = self.account_service.create_account()
+        with self.assertRaises(DecimalValueError):
+            self.account_service.deposit(account.account_number, 5.5)
 
     def test_withdraw(self):
         pass
@@ -62,11 +84,6 @@ class AccountServiceTest(TestCase):
 
 """
 class AccountServiceTest(TestCase):
-    def test_failed_find_by_account_number_by_no_such_account(self):
-        self.repository.save(self.account)
-        with self.assertRaises(NoSuchElementError):
-            account = self.repository.find_by_account_number("000-000-0000")
-
     def test_failed_update_balance_by_negative_value(self):
         self.repository.save(self.account)
         with self.assertRaises(NegativeValueError):
