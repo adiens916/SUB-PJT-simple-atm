@@ -10,6 +10,9 @@ class AccountService:
         account = self.repository.save(Account())
         return account
 
+    def validate_account_number(self, account: Account) -> bool:
+        return account.is_valid_account_number()
+
     def get_balance(self):
         pass
 

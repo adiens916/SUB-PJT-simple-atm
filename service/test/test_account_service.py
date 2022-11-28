@@ -22,7 +22,27 @@ class AccountServiceTest(TestCase):
         print(account.account_number)
 
     def test_validate_account_number(self):
-        pass
+        account: Account = self.account_service.create_account()
+        result = self.account_service.validate_account_number(account)
+        self.assertTrue(result)
+
+    def test_failed_validate_account_number_by_short_number(self):
+        account = Account()
+        account.account_number = "123-456-78"
+        result = self.account_service.validate_account_number(account)
+        self.assertFalse(result)
+
+    def test_failed_validate_account_number_by_empty_number(self):
+        account = Account()
+        account.account_number = ""
+        result = self.account_service.validate_account_number(account)
+        self.assertFalse(result)
+
+    def test_failed_validate_account_number_by_null_number(self):
+        account = Account()
+        account.account_number = None
+        result = self.account_service.validate_account_number(account)
+        self.assertFalse(result)
 
     def test_get_balance(self):
         pass
@@ -36,20 +56,6 @@ class AccountServiceTest(TestCase):
 
 """
 class AccountServiceTest(TestCase):
-    def test_failed_save_by_empty_number(self):
-        self.account.account_number = None
-        with self.assertRaises(EmptyValueError):
-            self.repository.save(self.account)
-
-        self.account.account_number = ""
-        with self.assertRaises(EmptyValueError):
-            self.repository.save(self.account)
-
-    def test_failed_save_by_short_number(self):
-        self.account.account_number = "123-456-7"
-        with self.assertRaises(WrongValueError):
-            self.repository.save(self.account)
-
     def test_failed_find_by_account_number_by_no_such_account(self):
         self.repository.save(self.account)
         with self.assertRaises(NoSuchElementError):
