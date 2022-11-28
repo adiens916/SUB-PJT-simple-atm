@@ -1,15 +1,4 @@
-# TODO: 값 유효성 검사하는 부분은 service로 옮기기
-# repository에서는 그냥 입출력만 잘 되도록 구현하기
-
 from unittest import TestCase
-
-from repository.account_repository import (
-    NoSuchElementError,
-    EmptyValueError,
-    WrongValueError,
-    NegativeValueError,
-    DecimalValueError,
-)
 from repository.account_repository_memory import AccountRepositoryMemory
 from domain.account import Account
 
@@ -31,29 +20,10 @@ class AccountRepositoryTest(TestCase):
         self.assertIs(account_return.account_number, "123-456-7890")
         self.assertIs(account_return.balance, 10000)
 
-    def test_failed_save_by_empty_number(self):
-        self.account.account_number = None
-        with self.assertRaises(EmptyValueError):
-            self.repository.save(self.account)
-
-        self.account.account_number = ""
-        with self.assertRaises(EmptyValueError):
-            self.repository.save(self.account)
-
-    def test_failed_save_by_short_number(self):
-        self.account.account_number = "123-456-7"
-        with self.assertRaises(WrongValueError):
-            self.repository.save(self.account)
-
     def test_find_by_account_number(self):
         self.repository.save(self.account)
         account = self.repository.find_by_account_number("123-456-7890")
         self.assertEqual(account.account_number, self.account.account_number)
-
-    def test_failed_find_by_account_number_by_no_such_account(self):
-        self.repository.save(self.account)
-        with self.assertRaises(NoSuchElementError):
-            account = self.repository.find_by_account_number("000-000-0000")
 
     def test_update_balance(self):
         self.repository.save(self.account)
@@ -65,14 +35,3 @@ class AccountRepositoryTest(TestCase):
 
         account = self.repository.find_by_account_number(self.account.account_number)
         self.assertEqual(account.balance, 30000)
-
-    def test_failed_update_balance_by_negative_value(self):
-        self.repository.save(self.account)
-        with self.assertRaises(NegativeValueError):
-            self.repository.update_balance(self.account.account_number, -30000)
-
-    def test_failed_update_balance_by_decimal_value(self):
-        self.repository.save(self.account)
-        new_balance = self.account.balance + 2.5
-        with self.assertRaises(DecimalValueError):
-            self.repository.update_balance(self.account.account_number, new_balance)
