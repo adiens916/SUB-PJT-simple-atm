@@ -3,12 +3,14 @@ from repository.account_repository_memory import AccountRepositoryMemory
 
 
 class AccountService:
-    def __init__(self, account: Account | None) -> None:
-        self.account = account
+    def __init__(self, account=None) -> None:
+        if isinstance(account, Account):
+            self.account = account
         self.repository = AccountRepositoryMemory()
 
-    def create_account(self):
-        pass
+    def create_account(self) -> Account:
+        account = self.repository.save(Account())
+        return account
 
     def get_balance(self):
         pass

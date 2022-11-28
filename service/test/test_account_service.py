@@ -14,9 +14,11 @@ class AccountServiceTest(TestCase):
     def test_create_account(self):
         account_service = AccountService()
         account: Account = account_service.create_account()
+
         self.assertIsInstance(account, Account)
         self.assertIsNotNone(account.account_number)
         self.assertIsNot(account.account_number, "")
+        print(account.account_number)
 
     def test_validate_account_number(self):
         pass
