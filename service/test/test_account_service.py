@@ -45,7 +45,13 @@ class AccountServiceTest(TestCase):
         self.assertFalse(result)
 
     def test_get_balance(self):
-        pass
+        account = self.account_service.create_account()
+        balance = self.account_service.get_balance(account.account_number)
+        self.assertIsInstance(balance, int)
+
+    def test_failed_get_balance_by_null_account(self):
+        with self.assertRaises(NoSuchElementError):
+            balance = self.account_service.get_balance("")
 
     def test_deposit(self):
         pass
