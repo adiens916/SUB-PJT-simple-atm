@@ -1,5 +1,5 @@
 from unittest import TestCase
-
+from service.account_service import AccountService
 from service.account_service import (
     NoSuchElementError,
     EmptyValueError,
@@ -7,6 +7,21 @@ from service.account_service import (
     NegativeValueError,
     DecimalValueError,
 )
+
+
+class AccountServiceTest(TestCase):
+    def test_create_account(self):
+        pass
+
+    def test_get_balance(self):
+        pass
+
+    def test_deposit(self):
+        pass
+
+    def test_withdraw(self):
+        pass
+
 
 """
 class AccountServiceTest(TestCase):
