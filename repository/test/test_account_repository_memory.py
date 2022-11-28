@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, main
 from repository.account_repository_memory import AccountRepositoryMemory
 from domain.account import Account
 
