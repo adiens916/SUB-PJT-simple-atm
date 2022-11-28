@@ -63,6 +63,11 @@ class AccountServiceTest(TestCase):
         new_balance = self.account_service.get_balance(account.account_number)
         self.assertEqual(new_balance, 80000)
 
+    def test_failed_deposit_by_null_account(self):
+        account_number = ""
+        with self.assertRaises(NoSuchElementError):
+            self.account_service.deposit(account_number, 10000)
+
     def test_failed_deposit_by_zero_input(self):
         account = self.account_service.create_account()
         with self.assertRaises(EmptyValueError):

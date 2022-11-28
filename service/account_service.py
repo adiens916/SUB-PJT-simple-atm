@@ -23,7 +23,18 @@ class AccountService:
 
         return account.balance
 
-    def deposit(self):
+    def deposit(self, account_number: str, money: int):
+        if money == 0:
+            raise EmptyValueError
+        elif money < 0:
+            raise NegativeValueError
+        elif isinstance(money, float):
+            raise DecimalValueError
+
+        current_balance = self.get_balance(account_number)
+        current_balance += money
+        self.repository.update_balance(account_number, current_balance)
+
         pass
 
     def withdraw(self):
