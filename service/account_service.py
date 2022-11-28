@@ -3,9 +3,7 @@ from repository.account_repository_memory import AccountRepositoryMemory
 
 
 class AccountService:
-    def __init__(self, account=None) -> None:
-        if isinstance(account, Account):
-            self.account = account
+    def __init__(self) -> None:
         self.repository = AccountRepositoryMemory()
 
     def create_account(self) -> Account:

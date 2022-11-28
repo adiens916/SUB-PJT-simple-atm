@@ -11,9 +11,10 @@ from domain.account import Account
 
 
 class AccountServiceTest(TestCase):
+    account_service = AccountService()
+
     def test_create_account(self):
-        account_service = AccountService()
-        account: Account = account_service.create_account()
+        account: Account = self.account_service.create_account()
 
         self.assertIsInstance(account, Account)
         self.assertIsNotNone(account.account_number)
