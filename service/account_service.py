@@ -13,8 +13,15 @@ class AccountService:
     def validate_account_number(self, account: Account) -> bool:
         return account.is_valid_account_number()
 
-    def get_balance(self):
-        pass
+    def get_balance(self, account_number: str) -> int:
+        if not account_number:
+            raise NoSuchElementError
+
+        account = self.repository.find_by_account_number(account_number)
+        if not account:
+            raise NoSuchElementError
+
+        return account.balance
 
     def deposit(self):
         pass
