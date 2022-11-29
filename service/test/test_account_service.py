@@ -82,3 +82,28 @@ class AccountServiceTest(TestCase):
         account = self.account_service.create_account()
         with self.assertRaises(DecimalValueError):
             self.account_service.deposit(account.account_number, 5.5)
+
+    def test_withdraw(self):
+        account = self.account_service.create_account()
+        self.account_service.deposit(account.account_number, 50000)
+        self.account_service.withdraw(account.account_number, 20000)
+
+        balance = self.account_service.get_balance(account.account_number)
+        self.assertEqual(balance, 30000)
+
+    def test_failed_withdraw_by_empty_balance(self):
+        account = self.account_service.create_account()
+        with self.assertRaises(EmptyValueError):
+            self.account_service.withdraw(account.account_number, 20000)
+
+    def test_failed_withdraw_by_over_balance(self):
+        account = self.account_service.create_account()
+        self.account_service.deposit(account.account_number, 50000)
+        with self.assertRaises(WrongValueError):
+            self.account_service.withdraw(account.account_number, 100000)
+
+    def test_failed_withdraw_by_negative_input(self):
+        account = self.account_service.create_account()
+        self.account_service.deposit(account.account_number, 50000)
+        with self.assertRaises(NegativeValueError):
+            self.account_service.withdraw(account.account_number, -50000)
