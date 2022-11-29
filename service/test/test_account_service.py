@@ -82,21 +82,3 @@ class AccountServiceTest(TestCase):
         account = self.account_service.create_account()
         with self.assertRaises(DecimalValueError):
             self.account_service.deposit(account.account_number, 5.5)
-
-    def test_withdraw(self):
-        pass
-
-
-"""
-class AccountServiceTest(TestCase):
-    def test_failed_update_balance_by_negative_value(self):
-        self.repository.save(self.account)
-        with self.assertRaises(NegativeValueError):
-            self.repository.update_balance(self.account.account_number, -30000)
-
-    def test_failed_update_balance_by_decimal_value(self):
-        self.repository.save(self.account)
-        new_balance = self.account.balance + 2.5
-        with self.assertRaises(DecimalValueError):
-            self.repository.update_balance(self.account.account_number, new_balance)
-"""
