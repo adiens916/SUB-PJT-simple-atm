@@ -6,6 +6,7 @@ from service.account_service import (
     WrongValueError,
     NegativeValueError,
     DecimalValueError,
+    NotEnoughBalanceError,
 )
 from domain.account import Account
 
@@ -93,13 +94,13 @@ class AccountServiceTest(TestCase):
 
     def test_failed_withdraw_by_empty_balance(self):
         account = self.account_service.create_account()
-        with self.assertRaises(EmptyValueError):
+        with self.assertRaises(NotEnoughBalanceError):
             self.account_service.withdraw(account.account_number, 20000)
 
     def test_failed_withdraw_by_over_balance(self):
         account = self.account_service.create_account()
         self.account_service.deposit(account.account_number, 50000)
-        with self.assertRaises(WrongValueError):
+        with self.assertRaises(NotEnoughBalanceError):
             self.account_service.withdraw(account.account_number, 100000)
 
     def test_failed_withdraw_by_negative_input(self):
@@ -107,3 +108,9 @@ class AccountServiceTest(TestCase):
         self.account_service.deposit(account.account_number, 50000)
         with self.assertRaises(NegativeValueError):
             self.account_service.withdraw(account.account_number, -50000)
+
+    def test_failed_withdraw_by_decimal_input(self):
+        account = self.account_service.create_account()
+        self.account_service.deposit(account.account_number, 50000)
+        with self.assertRaises(DecimalValueError):
+            self.account_service.withdraw(account.account_number, 5000.0)

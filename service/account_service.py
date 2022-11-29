@@ -35,10 +35,18 @@ class AccountService:
         current_balance += money
         self.repository.update_balance(account_number, current_balance)
 
-        pass
+    def withdraw(self, account_number: str, money: int):
+        if money < 0:
+            raise NegativeValueError
+        elif isinstance(money, float):
+            raise DecimalValueError
 
-    def withdraw(self):
-        pass
+        current_balance = self.get_balance(account_number)
+        if current_balance < money:
+            raise NotEnoughBalanceError
+
+        current_balance -= money
+        self.repository.update_balance(account_number, current_balance)
 
 
 class NoSuchElementError(Exception):
@@ -58,4 +66,8 @@ class NegativeValueError(Exception):
 
 
 class DecimalValueError(Exception):
+    pass
+
+
+class NotEnoughBalanceError(Exception):
     pass
