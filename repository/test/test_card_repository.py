@@ -18,10 +18,9 @@ class CardRepositoryTest(TestCase):
 
     def test_save(self):
         card_return = self.repository.save(self.card)
-
-        card_number_validity = Card.validate_card_number(card_return.card_number)
-        self.assertTrue(card_number_validity)
-
+        self.assertIsNotNone(card_return)
+        self.assertIsNot(card_return.card_number, "")
+        self.assertIsNot(card_return.card_number, None)
         self.assertIsNotNone(card_return.hashed_pin_number)
         self.assertGreater(len(card_return.hashed_pin_number), 0)
 
