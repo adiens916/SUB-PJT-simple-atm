@@ -24,25 +24,25 @@ class AccountServiceTest(TestCase):
 
     def test_validate_account_number(self):
         account: Account = self.account_service.create_account()
-        result = self.account_service.validate_account_number(account)
+        result = self.account_service.validate_account_number(account.account_number)
         self.assertTrue(result)
 
     def test_failed_validate_account_number_by_short_number(self):
         account = Account()
         account.account_number = "123-456-78"
-        result = self.account_service.validate_account_number(account)
+        result = self.account_service.validate_account_number(account.account_number)
         self.assertFalse(result)
 
     def test_failed_validate_account_number_by_empty_number(self):
         account = Account()
         account.account_number = ""
-        result = self.account_service.validate_account_number(account)
+        result = self.account_service.validate_account_number(account.account_number)
         self.assertFalse(result)
 
     def test_failed_validate_account_number_by_null_number(self):
         account = Account()
         account.account_number = None
-        result = self.account_service.validate_account_number(account)
+        result = self.account_service.validate_account_number(account.account_number)
         self.assertFalse(result)
 
     def test_get_balance(self):
