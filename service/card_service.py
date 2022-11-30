@@ -43,7 +43,7 @@ class CardService:
 
         card = self.repository.find_by_card_number(card_number)
         card.linked_account_number = account_number
-        self.repository.save(card)
+        self.repository.update_linked_account_number(card_number, account_number)
 
 
 class NoSuchElementError(Exception):
