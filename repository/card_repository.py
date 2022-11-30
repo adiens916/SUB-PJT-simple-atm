@@ -10,3 +10,7 @@ class CardRepository(metaclass=ABCMeta):
     @abstractmethod
     def find_by_card_number(self, card_number: str) -> Card | None:
         pass
+
+
+class DuplicateKeyError(Exception):
+    pass
