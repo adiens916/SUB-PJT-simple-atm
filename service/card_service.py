@@ -7,6 +7,11 @@ class CardService:
         self.repository = CardRepositoryMemory()
 
     def create_card(self, pin_number: str, linked_account_number=None) -> Card:
+        if pin_number == None or pin_number == "":
+            raise EmptyValueError
+        if len(pin_number) != 4 or not pin_number.isdigit():
+            raise WrongValueError
+
         card = Card(pin_number, linked_account_number)
         card_saved = self.repository.save(card)
         return card_saved
