@@ -1,5 +1,6 @@
 from unittest import TestCase
 from repository.card_repository_memory import CardRepositoryMemory
+from repository.card_repository import DuplicateKeyError
 from domain.card import Card
 
 SAMPLE_CARD_NUMBER = "1234-5678-9012-3456"
@@ -23,6 +24,11 @@ class CardRepositoryTest(TestCase):
         self.assertIsNot(card_return.card_number, None)
         self.assertIsNotNone(card_return.hashed_pin_number)
         self.assertGreater(len(card_return.hashed_pin_number), 0)
+
+    def test_failed_save_by_same_card_number(self):
+        self.repository.save(self.card)
+        with self.assertRaises(DuplicateKeyError):
+            self.repository.save(self.card)
 
     def test_find_by_card_number(self):
         card = Card(SAMPLE_PIN_NUMBER)

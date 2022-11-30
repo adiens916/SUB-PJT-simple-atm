@@ -16,3 +16,7 @@ class AccountRepository:
     @abc.abstractmethod
     def update_balance(self, account_number: str, balance: int) -> bool:
         pass
+
+
+class DuplicateKeyError(Exception):
+    pass

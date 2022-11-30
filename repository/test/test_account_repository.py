@@ -1,5 +1,6 @@
 from unittest import TestCase
 from repository.account_repository_memory import AccountRepositoryMemory
+from repository.account_repository import DuplicateKeyError
 from domain.account import Account
 
 
@@ -19,6 +20,11 @@ class AccountRepositoryTest(TestCase):
         account_return = self.repository.save(self.account)
         self.assertIs(account_return.account_number, "123-456-7890")
         self.assertIs(account_return.balance, 10000)
+
+    def test_failed_save_by_duplicate_key(self):
+        self.repository.save(self.account)
+        with self.assertRaises(DuplicateKeyError):
+            self.repository.save(self.account)
 
     def test_find_by_account_number(self):
         self.repository.save(self.account)

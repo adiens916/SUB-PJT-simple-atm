@@ -1,11 +1,14 @@
 from domain.account import Account
-from .account_repository import AccountRepository
+from .account_repository import AccountRepository, DuplicateKeyError
 
 
 class AccountRepositoryMemory(AccountRepository):
     store = dict()
 
     def save(self, account: Account) -> Account:
+        if self.store.get(account.account_number) != None:
+            raise DuplicateKeyError
+
         self.store[account.account_number] = account
         return account
 
