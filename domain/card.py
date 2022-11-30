@@ -1,4 +1,8 @@
 import random
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
+
+ph = PasswordHasher()
 
 
 class Card:
@@ -20,9 +24,6 @@ class Card:
         card_number_parts = [generate_random_num_string(4) for _ in range(4)]
         return "-".join(card_number_parts)
 
-    def get_hashed_pin_number(self, pin_number: str) -> str:
-        pass
-
     @staticmethod
     def validate_card_number(card_number: str) -> bool:
         if not isinstance(card_number, str):
@@ -40,3 +41,14 @@ class Card:
                     return False
 
         return True
+
+    def get_hashed_pin_number(self, pin_number: str) -> str:
+        hashed_pin_number = ph.hash(pin_number)
+        return hashed_pin_number
+
+    def validate_pin_number(self, pin_number: str) -> bool:
+        try:
+            ph.verify(self.hashed_pin_number, pin_number)
+            return True
+        except VerifyMismatchError:
+            return False
