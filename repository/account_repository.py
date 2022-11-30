@@ -20,3 +20,7 @@ class AccountRepository:
 
 class DuplicateKeyError(Exception):
     pass
+
+
+class NoSuchElementError(Exception):
+    pass
