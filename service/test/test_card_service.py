@@ -29,7 +29,31 @@ class CardServiceTest(TestCase):
             card_long = self.card_service.create_card("32457", SAMPLE_ACCOUNT_NUMBER)
 
     def test_authenticate_card_by_pin(self):
-        pass
+        card = self.card_service.create_card(SAMPLE_PIN_NUMBER)
+        result = self.card_service.authenticate_card_by_pin(
+            card.card_number, SAMPLE_PIN_NUMBER
+        )
+        self.assertTrue(result)
+
+    def test_failed_authenticate_card_by_pin_by_wrong_pin(self):
+        card = self.card_service.create_card(SAMPLE_PIN_NUMBER)
+        result = self.card_service.authenticate_card_by_pin(card.card_number, "0000")
+        self.assertFalse(result)
+
+    def test_failed_authenticate_card_by_pin_by_empty_pin(self):
+        card = self.card_service.create_card(SAMPLE_PIN_NUMBER)
+
+        with self.assertRaises(EmptyValueError):
+            result = self.card_service.authenticate_card_by_pin(card.card_number, None)
+
+        with self.assertRaises(EmptyValueError):
+            result = self.card_service.authenticate_card_by_pin(card.card_number, "")
+
+    def test_failed_authenticate_card_by_pin_by_wrong_format(self):
+        card = self.card_service.create_card(SAMPLE_PIN_NUMBER)
+
+        with self.assertRaises(WrongValueError):
+            result = self.card_service.authenticate_card_by_pin(card.card_number, "123")
 
     def test_get_linked_account_number(self):
         pass
