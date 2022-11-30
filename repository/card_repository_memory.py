@@ -19,3 +19,6 @@ class CardRepositoryMemory(CardRepository):
         else:
             print("The card is not found.")
             return None
+
+    def update_linked_account_number(self, card_number: str, account_number: str):
+        pass
