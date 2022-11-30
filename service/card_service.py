@@ -17,7 +17,13 @@ class CardService:
         return card_saved
 
     def authenticate_card_by_pin(self, card_number: str, pin_number: str) -> bool:
-        pass
+        if pin_number == None or pin_number == "":
+            raise EmptyValueError
+        if len(pin_number) != 4 or not pin_number.isdigit():
+            raise WrongValueError
+
+        card = self.repository.find_by_card_number(card_number)
+        return card.validate_pin_number(pin_number)
 
     def get_linked_account_number(self, card_number: str) -> str:
         pass
