@@ -13,11 +13,12 @@ class Account:
         back = "".join(random.choices(num_strings, k=4))
         return f"{front}-{middle}-{back}"
 
-    def is_valid_account_number(self):
-        if not isinstance(self.account_number, str):
+    @staticmethod
+    def validate_account_number(account_number: str) -> bool:
+        if not isinstance(account_number, str):
             return False
 
-        parts = self.account_number.split("-")
+        parts = account_number.split("-")
         if len(parts) != 3:
             return False
 
