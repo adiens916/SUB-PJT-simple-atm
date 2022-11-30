@@ -26,7 +26,14 @@ class CardService:
         return card.validate_pin_number(pin_number)
 
     def get_linked_account_number(self, card_number: str) -> str:
-        pass
+        if not Card.validate_card_number(card_number):
+            raise WrongValueError
+
+        card = self.repository.find_by_card_number(card_number)
+        if not card.linked_account_number:
+            raise NoSuchElementError
+
+        return card.linked_account_number
 
     def change_linked_account_number(self, card_number: str, account_number: str):
         pass
