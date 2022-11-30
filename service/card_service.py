@@ -1,5 +1,6 @@
 from repository.card_repository_memory import CardRepositoryMemory
 from domain.card import Card
+from domain.account import Account
 
 
 class CardService:
@@ -36,7 +37,13 @@ class CardService:
         return card.linked_account_number
 
     def change_linked_account_number(self, card_number: str, account_number: str):
-        pass
+        result = Account.validate_account_number(account_number)
+        if not result:
+            raise WrongValueError
+
+        card = self.repository.find_by_card_number(card_number)
+        card.linked_account_number = account_number
+        self.repository.save(card)
 
 
 class NoSuchElementError(Exception):
