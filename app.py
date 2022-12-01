@@ -24,10 +24,16 @@ def prep_account_and_card():
         if is_valid_pin_number(pin_number):
             break
 
-    account_number = bank_controller.create_account().get("data")
-    saved_card_number = bank_controller.create_card(pin_number, account_number).get(
-        "data"
-    )
+    while True:
+        account_number = bank_controller.create_account().get("data")
+        if account_number:
+            break
+
+    while True:
+        response = bank_controller.create_card(pin_number, account_number)
+        saved_card_number = response.get("data")
+        if saved_card_number:
+            break
 
     print("All works done! Now you can use this ATM.\n")
 
@@ -39,13 +45,13 @@ def insert_pin():
         print("Please enter your PIN number.")
         pin_number = input(": ").strip()
 
-        if not is_valid_pin_number(pin_number):
+        response = bank_controller.authenticate_card_by_pin(
+            saved_card_number, pin_number
+        )
+        if response.get("ok") == "false":
             continue
 
-        is_pin_correct = bank_controller.authenticate_card_by_pin(
-            saved_card_number, pin_number
-        ).get("data")
-
+        is_pin_correct = response.get("data")
         if is_pin_correct:
             return
 
@@ -71,30 +77,54 @@ def execute_command():
         command = input("Enter a command number (1 ~ 4): ").strip()
 
         if command == "1":
-            account = atm_controller.get_linked_account_number(saved_card_number).get(
-                "data"
-            )
-            balance = atm_controller.get_balance(account).get("data")
+            response = atm_controller.get_linked_account_number(saved_card_number)
+            if response.get("ok") == "false":
+                print(response)
+                continue
+            account = response.get("data")
+
+            response = atm_controller.get_balance(account)
+            if response.get("ok") == "false":
+                print(response)
+                continue
+
+            balance = response.get("data")
             print(f"Current Balance: {balance}")
 
         elif command == "2":
             print("Enter amount for deposit")
             deposit = int(input(": "))
 
-            account = atm_controller.get_linked_account_number(saved_card_number).get(
-                "data"
-            )
-            updated_balance = atm_controller.deposit(account, deposit).get("data")
+            response = atm_controller.get_linked_account_number(saved_card_number)
+            if response.get("ok") == "false":
+                print(response)
+                continue
+            account = response.get("data")
+
+            response = atm_controller.deposit(account, deposit)
+            if response.get("ok") == "false":
+                print(response)
+                continue
+            updated_balance = response.get("data")
+
             print(f"Current Balance: {updated_balance}")
 
         elif command == "3":
             print("Enter amount for withdrawal")
             debit = int(input(": "))
 
-            account = atm_controller.get_linked_account_number(saved_card_number).get(
-                "data"
-            )
-            updated_balance = atm_controller.withdraw(account, debit).get("data")
+            response = atm_controller.get_linked_account_number(saved_card_number)
+            if response.get("ok") == "false":
+                print(response)
+                continue
+            account = response.get("data")
+
+            response = atm_controller.withdraw(account, debit)
+            if response.get("ok") == "false":
+                print(response)
+                continue
+            updated_balance = response.get("data")
+
             print(f"Current Balance: {updated_balance}")
 
         elif command == "4":
