@@ -4,7 +4,7 @@ from service.account_service import (
     NoSuchAccountError,
     ZeroDepositError,
     NegativeValueError,
-    DecimalValueError,
+    NotIntError,
     NotEnoughBalanceError,
 )
 from domain.account import Account
@@ -80,7 +80,7 @@ class AccountServiceTest(TestCase):
 
     def test_failed_deposit_by_decimal_input(self):
         account = self.account_service.create_account()
-        with self.assertRaises(DecimalValueError):
+        with self.assertRaises(NotIntError):
             self.account_service.deposit(account.account_number, 5.5)
 
     def test_withdraw(self):
@@ -111,5 +111,5 @@ class AccountServiceTest(TestCase):
     def test_failed_withdraw_by_decimal_input(self):
         account = self.account_service.create_account()
         self.account_service.deposit(account.account_number, 50000)
-        with self.assertRaises(DecimalValueError):
+        with self.assertRaises(NotIntError):
             self.account_service.withdraw(account.account_number, 5000.0)

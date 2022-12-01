@@ -13,7 +13,7 @@ from service.account_service import (
     NoSuchAccountError,
     ZeroDepositError,
     NegativeValueError,
-    DecimalValueError,
+    NotIntError,
     NotEnoughBalanceError,
 )
 from service.card_service import (
@@ -87,11 +87,11 @@ class AtmController:
                 "ok": "false",
                 "message": "Not available negative value.",
             }
-        except DecimalValueError:
+        except NotIntError:
             return {
                 "data": -1,
                 "ok": "false",
-                "message": "Not available decimal value.",
+                "message": "No integer value.",
             }
 
     def withdraw(self, account_number: str, withdrawal: int) -> Response:
@@ -109,11 +109,11 @@ class AtmController:
                 "ok": "false",
                 "message": "Not available negative value.",
             }
-        except DecimalValueError:
+        except NotIntError:
             return {
                 "data": -1,
                 "ok": "false",
-                "message": "Not available decimal value.",
+                "message": "No integer value.",
             }
         except NotEnoughBalanceError:
             return {"data": -1, "ok": "false", "message": "Not enough money."}
