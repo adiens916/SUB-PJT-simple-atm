@@ -1,5 +1,9 @@
 from domain.account import Account
 from repository.account_repository_memory import AccountRepositoryMemory
+from repository.account_repository import (
+    NoSuchAccountError as NoAccountInDBError,
+    DuplicateKeySaveError,
+)
 
 
 class AccountService:
@@ -7,21 +11,21 @@ class AccountService:
         self.repository = AccountRepositoryMemory()
 
     def create_account(self) -> Account:
-        account = self.repository.save(Account())
-        return account
+        try:
+            account = self.repository.save(Account())
+            return account
+        except DuplicateKeySaveError:
+            raise DuplicateKeySaveError
 
     def validate_account_number(self, account_number: str) -> bool:
         return Account.validate_account_number(account_number)
 
     def get_balance(self, account_number: str) -> int:
-        if not account_number:
+        try:
+            account = self.repository.find_by_account_number(account_number)
+            return account.balance
+        except NoAccountInDBError:
             raise NoSuchAccountError
-
-        account = self.repository.find_by_account_number(account_number)
-        if not account:
-            raise NoSuchAccountError
-
-        return account.balance
 
     def deposit(self, account_number: str, money: int):
         if money == 0:
