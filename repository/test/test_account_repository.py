@@ -1,6 +1,6 @@
 from unittest import TestCase
 from repository.account_repository_memory import AccountRepositoryMemory
-from repository.account_repository import DuplicateKeyError, NoSuchElementError
+from repository.account_repository import DuplicateKeySaveError, NoSuchAccountError
 from domain.account import Account
 
 SAMPLE_ACCOUNT_NUMBER = "123-456-7890"
@@ -26,7 +26,7 @@ class AccountRepositoryTest(TestCase):
 
     def test_failed_save_by_duplicate_key(self):
         self.repository.save(self.account)
-        with self.assertRaises(DuplicateKeyError):
+        with self.assertRaises(DuplicateKeySaveError):
             self.repository.save(self.account)
 
     def test_find_by_account_number(self):
@@ -35,7 +35,7 @@ class AccountRepositoryTest(TestCase):
         self.assertEqual(account.account_number, self.account.account_number)
 
     def test_failed_find_by_account_number_by_non_existent(self):
-        with self.assertRaises(NoSuchElementError):
+        with self.assertRaises(NoSuchAccountError):
             self.repository.find_by_account_number(NOT_SAVED_ACCOUNT_NUMBER)
 
     def test_update_balance(self):
