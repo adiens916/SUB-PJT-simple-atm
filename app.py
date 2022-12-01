@@ -93,7 +93,7 @@ def execute_command():
 
         elif command == "2":
             print("Enter amount for deposit")
-            deposit = int(input(": "))
+            deposit = input(": ")
 
             response = atm_controller.get_linked_account_number(saved_card_number)
             if response.get("ok") == "false":
@@ -111,7 +111,7 @@ def execute_command():
 
         elif command == "3":
             print("Enter amount for withdrawal")
-            debit = int(input(": "))
+            debit = input(": ")
 
             response = atm_controller.get_linked_account_number(saved_card_number)
             if response.get("ok") == "false":

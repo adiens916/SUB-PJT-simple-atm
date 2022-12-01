@@ -27,10 +27,16 @@ class AccountService:
         except NoAccountInDBError:
             raise NoSuchAccountError
 
-    def deposit(self, account_number: str, money: int):
-        if not isinstance(money, int):
+    def deposit(self, account_number: str, money: int | str):
+        if isinstance(money, float):
             raise NotIntError
-        elif money == 0:
+        if isinstance(money, str):
+            try:
+                money = int(money)
+            except ValueError:
+                raise NotIntError
+
+        if money == 0:
             raise ZeroDepositError
         elif money < 0:
             raise NegativeValueError
@@ -39,10 +45,16 @@ class AccountService:
         current_balance += money
         self.repository.update_balance(account_number, current_balance)
 
-    def withdraw(self, account_number: str, money: int):
-        if not isinstance(money, int):
+    def withdraw(self, account_number: str, money: int | str):
+        if isinstance(money, float):
             raise NotIntError
-        elif money < 0:
+        if isinstance(money, str):
+            try:
+                money = int(money)
+            except ValueError:
+                raise NotIntError
+
+        if money < 0:
             raise NegativeValueError
 
         current_balance = self.get_balance(account_number)
