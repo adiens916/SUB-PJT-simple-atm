@@ -15,17 +15,17 @@ class AccountService:
 
     def get_balance(self, account_number: str) -> int:
         if not account_number:
-            raise NoSuchElementError
+            raise NoSuchAccountError
 
         account = self.repository.find_by_account_number(account_number)
         if not account:
-            raise NoSuchElementError
+            raise NoSuchAccountError
 
         return account.balance
 
     def deposit(self, account_number: str, money: int):
         if money == 0:
-            raise EmptyValueError
+            raise ZeroDepositError
         elif money < 0:
             raise NegativeValueError
         elif isinstance(money, float):
@@ -49,15 +49,11 @@ class AccountService:
         self.repository.update_balance(account_number, current_balance)
 
 
-class NoSuchElementError(Exception):
+class NoSuchAccountError(Exception):
     pass
 
 
-class EmptyValueError(Exception):
-    pass
-
-
-class WrongValueError(Exception):
+class ZeroDepositError(Exception):
     pass
 
 

@@ -1,5 +1,9 @@
 from domain.account import Account
-from .account_repository import AccountRepository, DuplicateKeyError, NoSuchElementError
+from .account_repository import (
+    AccountRepository,
+    DuplicateKeySaveError,
+    NoSuchAccountError,
+)
 
 
 class AccountRepositoryMemory(AccountRepository):
@@ -7,7 +11,7 @@ class AccountRepositoryMemory(AccountRepository):
 
     def save(self, account: Account) -> Account:
         if self.store.get(account.account_number) != None:
-            raise DuplicateKeyError
+            raise DuplicateKeySaveError
 
         self.store[account.account_number] = account
         return account
@@ -17,7 +21,7 @@ class AccountRepositoryMemory(AccountRepository):
         if account:
             return account
         else:
-            raise NoSuchElementError
+            raise NoSuchAccountError
 
     def update_balance(self, account_number: str, balance: int) -> bool:
         account = self.find_by_account_number(account_number)

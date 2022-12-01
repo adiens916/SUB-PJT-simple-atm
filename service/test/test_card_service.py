@@ -1,6 +1,11 @@
 from unittest import TestCase
 from service.card_service import CardService
-from service.card_service import NoSuchElementError, EmptyValueError, WrongValueError
+from service.card_service import (
+    NoLinkedAccountError,
+    EmptyPinNumberError,
+    WrongPinNumberError,
+    WrongFormatError,
+)
 from domain.card import Card
 
 SAMPLE_PIN_NUMBER = "9173"
@@ -20,12 +25,12 @@ class CardServiceTest(TestCase):
         self.assertTrue(validity)
 
     def test_failed_create_card_by_empty_pin_number(self):
-        with self.assertRaises(EmptyValueError):
+        with self.assertRaises(EmptyPinNumberError):
             card = self.card_service.create_card(None, SAMPLE_ACCOUNT_NUMBER)
             card = self.card_service.create_card("", SAMPLE_ACCOUNT_NUMBER)
 
     def test_failed_create_card_by_wrong_pin_number(self):
-        with self.assertRaises(WrongValueError):
+        with self.assertRaises(WrongPinNumberError):
             card_short = self.card_service.create_card("324", SAMPLE_ACCOUNT_NUMBER)
             card_long = self.card_service.create_card("32457", SAMPLE_ACCOUNT_NUMBER)
 
@@ -44,16 +49,16 @@ class CardServiceTest(TestCase):
     def test_failed_authenticate_card_by_pin_by_empty_pin(self):
         card = self.card_service.create_card(SAMPLE_PIN_NUMBER)
 
-        with self.assertRaises(EmptyValueError):
+        with self.assertRaises(EmptyPinNumberError):
             result = self.card_service.authenticate_card_by_pin(card.card_number, None)
 
-        with self.assertRaises(EmptyValueError):
+        with self.assertRaises(EmptyPinNumberError):
             result = self.card_service.authenticate_card_by_pin(card.card_number, "")
 
     def test_failed_authenticate_card_by_pin_by_wrong_format(self):
         card = self.card_service.create_card(SAMPLE_PIN_NUMBER)
 
-        with self.assertRaises(WrongValueError):
+        with self.assertRaises(WrongPinNumberError):
             result = self.card_service.authenticate_card_by_pin(card.card_number, "123")
 
     def test_get_linked_account_number(self):
@@ -63,11 +68,11 @@ class CardServiceTest(TestCase):
 
     def test_failed_get_linked_account_number_by_empty_account(self):
         card = self.card_service.create_card(SAMPLE_PIN_NUMBER)
-        with self.assertRaises(NoSuchElementError):
+        with self.assertRaises(NoLinkedAccountError):
             self.card_service.get_linked_account_number(card.card_number)
 
     def test_failed_get_linked_account_number_by_empty_card(self):
-        with self.assertRaises(WrongValueError):
+        with self.assertRaises(WrongFormatError):
             self.card_service.get_linked_account_number(None)
             self.card_service.get_linked_account_number("")
 
@@ -96,7 +101,7 @@ class CardServiceTest(TestCase):
     def test_failed_change_linked_account_number_by_wrong_account(self):
         card = self.card_service.create_card(SAMPLE_PIN_NUMBER, SAMPLE_ACCOUNT_NUMBER)
 
-        with self.assertRaises(WrongValueError):
+        with self.assertRaises(WrongFormatError):
             self.card_service.change_linked_account_number(
                 card.card_number, "1111111111"
             )

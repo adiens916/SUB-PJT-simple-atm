@@ -1,9 +1,8 @@
 from unittest import TestCase
 from service.account_service import AccountService
 from service.account_service import (
-    NoSuchElementError,
-    EmptyValueError,
-    WrongValueError,
+    NoSuchAccountError,
+    ZeroDepositError,
     NegativeValueError,
     DecimalValueError,
     NotEnoughBalanceError,
@@ -51,7 +50,7 @@ class AccountServiceTest(TestCase):
         self.assertIsInstance(balance, int)
 
     def test_failed_get_balance_by_null_account(self):
-        with self.assertRaises(NoSuchElementError):
+        with self.assertRaises(NoSuchAccountError):
             balance = self.account_service.get_balance("")
 
     def test_deposit(self):
@@ -66,12 +65,12 @@ class AccountServiceTest(TestCase):
 
     def test_failed_deposit_by_null_account(self):
         account_number = ""
-        with self.assertRaises(NoSuchElementError):
+        with self.assertRaises(NoSuchAccountError):
             self.account_service.deposit(account_number, 10000)
 
     def test_failed_deposit_by_zero_input(self):
         account = self.account_service.create_account()
-        with self.assertRaises(EmptyValueError):
+        with self.assertRaises(ZeroDepositError):
             self.account_service.deposit(account.account_number, 0)
 
     def test_failed_deposit_by_negative_input(self):

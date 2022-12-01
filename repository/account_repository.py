@@ -18,9 +18,9 @@ class AccountRepository:
         pass
 
 
-class DuplicateKeyError(Exception):
+class DuplicateKeySaveError(Exception):
     pass
 
 
-class NoSuchElementError(Exception):
+class NoSuchAccountError(Exception):
     pass

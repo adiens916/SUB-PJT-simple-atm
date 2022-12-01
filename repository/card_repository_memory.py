@@ -1,4 +1,8 @@
-from .card_repository import CardRepository, DuplicateKeyError, NoSuchElementError
+from .card_repository import (
+    CardRepository,
+    DuplicateKeySaveError,
+    NoSuchCardError,
+)
 from domain.card import Card
 
 
@@ -7,7 +11,7 @@ class CardRepositoryMemory(CardRepository):
 
     def save(self, card: Card) -> Card:
         if self.store.get(card.card_number) != None:
-            raise DuplicateKeyError
+            raise DuplicateKeySaveError
 
         self.store[card.card_number] = card
         return card
@@ -17,7 +21,7 @@ class CardRepositoryMemory(CardRepository):
         if card:
             return card
         else:
-            raise NoSuchElementError
+            raise NoSuchCardError
 
     def update_linked_account_number(self, card_number: str, account_number: str):
         card = self.find_by_card_number(card_number)
