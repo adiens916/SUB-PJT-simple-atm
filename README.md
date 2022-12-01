@@ -1,8 +1,6 @@
 # Simple ATM Controller
 
-- 클래스와 메서드로만 이루어진 간단한 ATM
-- MVC 패턴 구성
-- 테스트 코드 포함
+클래스와 메서드로만 이루어진 간단한 ATM
 
 ## Table of Contents
 - [Setup](#setup)
@@ -17,6 +15,11 @@ pip install argon2_cffi
 ```
 *Argon2: 암호화를 위한 해쉬 라이브러리*
 
+입출력은 app.py를 통해 확인할 수 있습니다.
+```bash
+python app.py
+```
+
 ## Test
 Python 내장 라이브러리인 unittest를 이용합니다.
 
@@ -24,6 +27,7 @@ Python 내장 라이브러리인 unittest를 이용합니다.
 ```bash
 python -m unittest
 ```
+![testing](./_README_asset/cap_testing.gif)
 
 패키지별로 테스트하고 싶은 경우,   
 `python -m unittest 패키지명/test/*.py` 형식으로 입력합니다.
@@ -32,7 +36,7 @@ python -m unittest
 python -m unittest service/test/*.py
 ```
 
-*주의: 각 폴더에 __init__.py를 추가해야 합니다.  
+*주의: 각 폴더에 \_\_init\_\_.py를 추가해야 합니다.  
 그래야 unittest가 파일들을 찾을 수 있습니다.*
 
 ## Flow
@@ -40,7 +44,26 @@ python -m unittest service/test/*.py
 
 (계좌 및 카드 생성) => PIN 입력 => (계좌 연동) => 잔액 조회 / 입출금
 
+1. 맨 처음은 카드 생성 단계입니다.  
+이때 PIN 번호도 같이 입력해서 카드를 만들고,  
+해당 카드와 연결된 계좌도 같이 생성합니다.
+![auth_pin](./_README_asset/cap_flow_1_auth_pin.gif)
+
+2. PIN 번호가 맞는 경우, 잔액 조회 등의 업무를 할 수 있습니다.
+![auth_pin](./_README_asset/cap_flow_2_banking.gif)
+
+3. 입금 시 잘못된 입력 값에 대해 응답 메시지를 반환합니다.  
+(0원 / 음수 / 실수 / 문자열)
+![](./_README_asset/cap_handling_deposit.gif)
+
+4. 출금 시에도 잘못된 입력 값에 대해 응답 메시지를 반환합니다.  
+(현재 잔액 초과 / 음수 / 실수 / 문자열)
+![](./_README_asset/cap_handling_withdrawal.gif)
+
+아래는 전체 흐름을 구조화한 그림입니다.
 ![Flow](./_README_asset/flow.png)
+
+
 
 ## Structure
 
