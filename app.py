@@ -10,30 +10,8 @@ def main():
     print("< Simple ATM >\n")
 
     prep_account_and_card()
-    authenticate_pin()
-
-    while True:
-        print()
-        print("You can select one of these.")
-        print("- 1. See Balance")
-        print("- 2. Deposit")
-        print("- 3. Withdraw")
-        print("- 4. Exit")
-
-        command = input("Enter a command: ").strip()
-
-        if command == "1":
-            balance = ""
-            print(f"Current Balance: {balance}")
-
-        elif command == "2":
-            deposit = int(input())
-
-        elif command == "3":
-            withdrawal = int(input())
-
-        elif command == "4":
-            break
+    insert_pin()
+    execute_command()
 
 
 def prep_account_and_card():
@@ -54,7 +32,7 @@ def prep_account_and_card():
     print("All works done! Now you can use this ATM.\n")
 
 
-def authenticate_pin():
+def insert_pin():
     available_input_count = 5
 
     while True:
@@ -79,6 +57,48 @@ def authenticate_pin():
         else:
             print("You have used up all input chances. Please contact a nearby bank.")
             exit()
+
+
+def execute_command():
+    while True:
+        print()
+        print("You can do one of these.")
+        print("- 1. See Balance")
+        print("- 2. Deposit")
+        print("- 3. Withdraw")
+        print("- 4. Exit")
+
+        command = input("Enter a command number (1 ~ 4): ").strip()
+
+        if command == "1":
+            account = atm_controller.get_linked_account_number(saved_card_number).get(
+                "data"
+            )
+            balance = atm_controller.get_balance(account).get("data")
+            print(f"Current Balance: {balance}")
+
+        elif command == "2":
+            print("Enter amount for deposit")
+            deposit = int(input(": "))
+
+            account = atm_controller.get_linked_account_number(saved_card_number).get(
+                "data"
+            )
+            updated_balance = atm_controller.deposit(account, deposit).get("data")
+            print(f"Current Balance: {updated_balance}")
+
+        elif command == "3":
+            print("Enter amount for withdrawal")
+            debit = int(input(": "))
+
+            account = atm_controller.get_linked_account_number(saved_card_number).get(
+                "data"
+            )
+            updated_balance = atm_controller.withdraw(account, debit).get("data")
+            print(f"Current Balance: {updated_balance}")
+
+        elif command == "4":
+            return
 
 
 def is_valid_pin_number(pin_number) -> bool:
