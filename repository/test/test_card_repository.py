@@ -1,6 +1,9 @@
 from unittest import TestCase
 from repository.card_repository_memory import CardRepositoryMemory
-from repository.card_repository import DuplicateKeyError, NoSuchElementError
+from repository.card_repository import (
+    DuplicateKeySaveError,
+    NoSuchCardError,
+)
 from domain.card import Card
 
 SAMPLE_CARD_NUMBER = "1234-5678-9012-3456"
@@ -28,7 +31,7 @@ class CardRepositoryTest(TestCase):
 
     def test_failed_save_by_same_card_number(self):
         self.repository.save(self.card)
-        with self.assertRaises(DuplicateKeyError):
+        with self.assertRaises(DuplicateKeySaveError):
             self.repository.save(self.card)
 
     def test_find_by_card_number(self):
@@ -40,7 +43,7 @@ class CardRepositoryTest(TestCase):
         self.assertEqual(card.card_number, card_ret.card_number)
 
     def test_failed_find_by_card_number_by_non_existent_card(self):
-        with self.assertRaises(NoSuchElementError):
+        with self.assertRaises(NoSuchCardError):
             self.repository.find_by_card_number(SAMPLE_CARD_NUMBER)
 
     def test_update_linked_account_number(self):

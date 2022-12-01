@@ -16,9 +16,9 @@ class CardRepository(metaclass=ABCMeta):
         pass
 
 
-class DuplicateKeyError(Exception):
+class DuplicateKeySaveError(Exception):
     pass
 
 
-class NoSuchElementError(Exception):
+class NoSuchCardError(Exception):
     pass
