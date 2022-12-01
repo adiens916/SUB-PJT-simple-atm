@@ -1,4 +1,4 @@
-from controller.atm_controller import AtmController, BankController
+from controller.controller import AtmController, BankController
 
 atm_controller = AtmController()
 bank_controller = BankController()
